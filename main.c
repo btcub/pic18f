@@ -1,0 +1,53 @@
+#pragma config CPUDIV = CLKDIV2 , USBDIV = ON    // You can write this way
+// OR
+#pragma config FOSC = IRC
+#pragma config FCMEN = OFF                                 // OR this way
+#pragma config BORV = 30
+#pragma config WDTEN = OFF
+#pragma config CPB = OFF
+#pragma config CPD = OFF
+#include <p18lf14k50.h>
+#include <spi.h>
+#include <usart.h> 
+#include <delays.h>
+void main()
+{
+  unsigned char c;
+  unsigned char column;
+  TRISA=0;
+  TRISC=0;
+
+LATCbits.LATC4=1;
+
+//    PORTA=1;
+//  PORTB=0xFF;
+//  PORTC=0xFF;
+
+    OSCCON=0b01100000; //Internal 4MHZ Oscillator
+		ADCON1=0x7F;//Make all ports Digital 
+		OpenUSART(USART_TX_INT_OFF &// Initialize USART, Transmit interrupt off
+		                              USART_RX_INT_ON &// Receive interrupt ON
+		                              USART_ASYNCH_MODE & // Use USART in asynchronous mode
+		                              USART_EIGHT_BIT &// Eight bit data
+		                              USART_CONT_RX &// Enable continous receiving
+		                              USART_BRGH_LOW,// Do not use baud rate multiplication
+		                              12);// For a baud rate of 9600 value of SPBRGH:SPBRG register pair
+		INTCONbits.PEIE=1;// Enable peripheral interrupts
+		INTCONbits.GIEH=1;// Enable all interrupts
+//		putrsUSART ("\nPlease type a S to Start");
+OpenSPI(SPI_FOSC_4,MODE_01,SMPMID);
+  //      SSPCON |= SPI_FOSC_64;
+     
+  
+ while(1) {
+putrsUSART(0x1);
+//      WriteSPI(0x01);
+//UARTIntPutChar(0xa);
+//    __delay_ms(500);
+ 
+ //   __delay_ms(50);
+ }
+  
+  
+
+}
